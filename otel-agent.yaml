@@ -1,7 +1,10 @@
 receivers:
   jaeger:
     protocols:
+      grpc:
+      thrift_binary:
       thrift_compact:
+      thrift_http:
 
 exporters:
   otlp:
@@ -10,10 +13,15 @@ exporters:
       insecure: true
 
 processors:
+  batch:
 
 service:
   pipelines:
     traces:
-      receivers: [jaeger]
-      processors: []
-      exporters: [otlp]
+      receivers: [ jaeger ]
+      processors: [ batch ]
+      exporters: [ otlp ]
+  telemetry:
+    metrics:
+      level: 1
+      address: 127.0.0.1:12345
